@@ -134,7 +134,6 @@ public class WorldLimiter
                 }
 
                 //text to show world count vs limit
-//                Component counterText = Component.literal("" + worldCount + "/" + worldLimit);
 
                 int pWidth = 40;
                 Button limiterLabel = Button.builder(limiterText, button -> {
