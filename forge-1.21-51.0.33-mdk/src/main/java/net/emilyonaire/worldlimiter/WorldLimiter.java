@@ -3,6 +3,7 @@ package net.emilyonaire.worldlimiter;
 import java.io.File;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.Util;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
 import net.minecraft.network.chat.Component;
@@ -133,12 +134,39 @@ public class WorldLimiter
                     }
                 }
 
-                //text to show world count vs limit
+                //button to show world count vs limit
+                Button infoLabel = Button.builder(Component.literal(""), button -> {
+                        // No action needed, just a label
+                        //open the config file location on click
+                            File configDir = new File(Minecraft.getInstance().gameDirectory, "config");
+                            if (configDir.exists()) {
+                                Util.getPlatform().openUri(configDir.toURI());
+                            } else {
+                                WorldLimiter.LOGGER.warn("Config directory does not exist: " + configDir.getAbsolutePath());
+                            }
+                    })
+                    .bounds(0, 0, 0, 0) // Invisible button
+                    .build();
+                event.addListener(infoLabel);
 
                 int pWidth = 40;
                 Button limiterLabel = Button.builder(limiterText, button -> {
                         // No action needed, just a label
                         LOGGER.info("hehehe someone got curious if it was a button.");
+
+                        //show message saying to go to the config file to change the limit
+                        infoLabel.setMessage(Component.literal("World limit is set in the config file."));
+//                        infoLabel.setBounds(selectWorldScreen.width / 2, selectWorldScreen.height - 30, 150, 20);
+//set bounds (there is no setbounds method, so we have to set manually)
+
+                        infoLabel.setX(selectWorldScreen.width / 2 - 154);
+                        infoLabel.setY(selectWorldScreen.height - (75+10));
+                        infoLabel.setWidth(308);
+                        infoLabel.setHeight(20);
+
+
+
+
                     })
                     .bounds(selectWorldScreen.width / 2 + (160), selectWorldScreen.height - 52, pWidth, 20)
 
